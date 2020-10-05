@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TextDisplay:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/TextDisplay_jar</output-path>
+    <root id="archive" name="TextDisplay.jar">
+      <element id="module-output" name="TextDisplay" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/json-20141113.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/google-collect-snapshot-20080321.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/darcula.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/annotations-17.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-io-2.6.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
