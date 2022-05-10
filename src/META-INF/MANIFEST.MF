@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: ink.repo.textdisplay.main.GUI
-
