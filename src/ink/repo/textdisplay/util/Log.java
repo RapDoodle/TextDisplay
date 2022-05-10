@@ -21,7 +21,7 @@ public class Log {
     public static void initLogger(String fileName) {
         try {
             File logFile = new File(fileName);
-            if(!logFile.exists()) {
+            if (!logFile.exists()) {
                 logFile.createNewFile();
             }
             fh = new FileHandler(fileName, true);
@@ -29,7 +29,7 @@ public class Log {
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
             logger.addHandler(fh);
-        }catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("[ERROR] Unable to create a logger. Errors may not be logged!");
         }
     }
@@ -47,7 +47,7 @@ public class Log {
         try {
             logger.setLevel(Level.FINE);
             logger.fine(msg);
-        }catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("[ERROR] Unable to log error message. Message:" + msg);
         }
     }
@@ -56,7 +56,7 @@ public class Log {
         try {
             logger.setLevel(Level.WARNING);
             logger.warning(msg);
-        }catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("[ERROR] Unable to log error message. Message:" + msg);
         }
     }

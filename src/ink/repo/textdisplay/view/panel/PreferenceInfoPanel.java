@@ -22,9 +22,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Hashtable;
 
-public class PanelPreferenceInfo extends JPanel {
-
-    private ControllerPreference c;
+public class PreferenceInfoPanel extends JPanel {
 
     private Container centerPanel;
     private JPanel bottomPanel;
@@ -43,31 +41,27 @@ public class PanelPreferenceInfo extends JPanel {
     private JTextField imageDirectoryTextField;
     private JButton selectImageDirectoryButton;
     private JComboBox<String> imageFitStyleComboBox;
+    Hashtable<Integer, Color> colorHashtable;
 
-    private boolean initializing;
+    private boolean initializing = true;
 
-    private JFrame parentFrame;
+    JButton confirmButton;
+    JButton applyButton;
+    JButton previewButton;
+    JButton cancelButton;
 
-    public PanelPreferenceInfo(JFrame parentFrame, ControllerPreference c) {
 
-        // Register references and set default instance variable(s)
-        this.c = c;
-        this.parentFrame = parentFrame;
-        initializing = true;
-
+    public PreferenceInfoPanel() {
         // Initialize center panel
         initCenterPanelComponents();
         initCenterPanelLayout();
 
         // Initialize bottom panel
         initBottomPanel();
+    }
 
-        // Load data into the fields
-        loadProfile();
-
-        // Exit initializing mode
-        initializing = false;
-
+    public JButton getSelectImageDirectoryButton() {
+        return selectImageDirectoryButton;
     }
 
     private void initCenterPanelComponents() {
@@ -84,19 +78,6 @@ public class PanelPreferenceInfo extends JPanel {
         imageDirectoryTextField.setEditable(false);
         selectImageDirectoryButton = new JButton("...");
         initImageFitStyleComboBox();
-        selectImageDirectoryButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fc = new JFileChooser();
-                fc.setAcceptAllFileFilterUsed(false);
-                fc.addChoosableFileFilter(new FileNameExtensionFilter("Image(*.jpg, *.jpeg, *.png)",
-                        "jpg", "JPG", "jpeg", "JPEG", "png", "PNG"));
-                if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                    File file  = fc.getSelectedFile();
-                    imageDirectoryTextField.setText(file.getPath());
-                }
-            }
-        });
     }
 
     private void initSliders() {
@@ -258,10 +239,10 @@ public class PanelPreferenceInfo extends JPanel {
         bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
         // Initialize buttons
-        JButton confirmButton = new JButton(LangManger.get("confirm"));
-        JButton applyButton = new JButton(LangManger.get("apply"));
-        JButton previewButton = new JButton(LangManger.get("preview"));
-        JButton cancelButton = new JButton(LangManger.get("cancel"));
+        confirmButton = new JButton(LangManger.get("confirm"));
+        applyButton = new JButton(LangManger.get("apply"));
+        previewButton = new JButton(LangManger.get("preview"));
+        cancelButton = new JButton(LangManger.get("cancel"));
 
         // Add buttons to the panel
         bottomPanel.add(cancelButton);
@@ -269,28 +250,7 @@ public class PanelPreferenceInfo extends JPanel {
         bottomPanel.add(applyButton);
         bottomPanel.add(confirmButton);
 
-        // Define actions
-        confirmButton.addActionListener((ActionEvent e) -> {
-            c.confirmButtonClicked(wrapProfileView());
-        });
-        applyButton.addActionListener((ActionEvent e) -> {
-            c.applyButtonClicked(wrapProfileView());
-        });
-        previewButton.addActionListener((ActionEvent e) -> {
-            c.previewButtonClicked(wrapProfileView());
-        });
-        cancelButton.addActionListener((ActionEvent e) -> {
-            c.cancelButtonClicked();
-        });
-
         add(bottomPanel, BorderLayout.SOUTH);
-
-    }
-
-    public Profile wrapProfileView() {
-        return c.wrapProfile(profileNameTextField, fontComboBox, fontStyleComboBox, fontSizeComboBox, null,
-                textDirectionComboBox, textArea, letterSpacingSlider, marginSlider, vOffsetSlider, hOffsetSlider, imageDirectoryTextField,
-                imageFitStyleComboBox);
     }
 
     private void initFontComboBox() {
@@ -302,20 +262,14 @@ public class PanelPreferenceInfo extends JPanel {
         }
         this.fontSizeComboBox = new JComboBox<>();
         fontSizeComboBox.setEditable(true);
-        int i = 8;
-        while(i <= 72) {
-            fontSizeComboBox.addItem(i);
-            if(i < 12) {
-                i++;
-            }else if(i < 28) {
-                i += 2;
-            }else if(i < 36) {
-                i += 8;
-            }else if(i < 48) {
-                i += 12;
-            }else {
-                i += 24;
-            }
+
+        // Typographic Scale
+        // Equation: a1 = round(a*r)
+        int a = 12;
+        double r = Math.pow(2, 0.2);
+        while (a <= 1032) {
+            fontSizeComboBox.addItem(a);
+            a = (int) Math.round(a * r);
         }
         this.fontStyleComboBox = new JComboBox<>();
         // Line up with the static constants in the class Font
@@ -329,13 +283,6 @@ public class PanelPreferenceInfo extends JPanel {
         textDirectionComboBox.addItem(LangManger.get("horizontal"));
         textDirectionComboBox.addItem(LangManger.get("vertical"));
         textDirectionComboBox.addItem(LangManger.get("vertical_inverted"));
-        textDirectionComboBox.addActionListener((ActionEvent e) -> {
-            if(textDirectionComboBox.getSelectedIndex() != 0) {
-                letterSpacingSlider.setEnabled(true);
-            }else{
-                letterSpacingSlider.setEnabled(false);
-            }
-        });
     }
 
     private void initImageFitStyleComboBox() {
@@ -347,14 +294,14 @@ public class PanelPreferenceInfo extends JPanel {
 
     private void initColorComboBox() {
         this.colorComboBox = new JComboBox<>();
-        Hashtable<Integer, Color> table = new Hashtable<Integer, Color>();
-        table.put(0, Color.BLACK);
-        table.put(1, Color.RED);
-        table.put(2, Color.ORANGE);
-        table.put(3, Color.YELLOW);
-        table.put(4, Color.GREEN);
-        table.put(5, Color.BLUE);
-        table.put(6, Color.WHITE);
+        colorHashtable = new Hashtable<>();
+        colorHashtable.put(0, Color.BLACK);
+        colorHashtable.put(1, Color.RED);
+        colorHashtable.put(2, Color.ORANGE);
+        colorHashtable.put(3, Color.YELLOW);
+        colorHashtable.put(4, Color.GREEN);
+        colorHashtable.put(5, Color.BLUE);
+        colorHashtable.put(6, Color.WHITE);
         colorComboBox.addItem(LangManger.get("black"));
         colorComboBox.addItem(LangManger.get("red"));
         colorComboBox.addItem(LangManger.get("orange"));
@@ -363,47 +310,86 @@ public class PanelPreferenceInfo extends JPanel {
         colorComboBox.addItem(LangManger.get("blue"));
         colorComboBox.addItem(LangManger.get("white"));
         colorComboBox.addItem(LangManger.get("others"));
-
-        c.setTmpColor(c.getColor());
-        try {
-            CommonUtils.getColorFromIndex(c.getTmpColor());
-        }catch(NullPointerException e) {
-            // When the color is not in the hash map, select "others"
-            colorComboBox.setSelectedIndex(colorComboBox.getMaximumRowCount() - 1);
-            table.put(7, c.getTmpColor());
-        }
-
-        colorComboBox.setRenderer(new ColorfulListRenderer(table));
-
-        // Define events
-        colorComboBox.addActionListener((ActionEvent e) -> {
-                Color localTmpColor = table.get(colorComboBox.getSelectedIndex());
-                if(localTmpColor != null) {
-                    c.setTmpColor(localTmpColor);;
-                }
-                if(colorComboBox.getSelectedIndex() == colorComboBox.getMaximumRowCount() - 1 && !initializing) {
-                    try {
-                        c.setTmpColor(JColorChooser.showDialog(null, "Color Picker", c.getTmpColor()));
-                        // Redefine the color of the "others" option
-                        table.put(7, c.getTmpColor());
-                        colorComboBox.setRenderer(new ColorfulListRenderer(table));  // Rerender for the combo box
-                    }catch(NullPointerException ex) {
-                        try {
-                            colorComboBox.setSelectedIndex(CommonUtils.getColorFromIndex(c.getTmpColor()));
-                        }catch(NullPointerException exp) {
-                            // Do nothing when the color previously selected was not in the color table
-                        }
-                    }
-                }
-            }
-        );
     }
 
-    private void loadProfile() {
-        c.updateFields(profileNameTextField, fontComboBox, fontStyleComboBox, fontSizeComboBox, colorComboBox,
-                textDirectionComboBox, textArea, letterSpacingSlider, marginSlider, vOffsetSlider, hOffsetSlider, imageDirectoryTextField,
-                imageFitStyleComboBox);
+    public JTextField getProfileNameTextField() {
+        return profileNameTextField;
     }
 
+    public JComboBox<String> getFontComboBox() {
+        return fontComboBox;
+    }
+
+    public JComboBox<Integer> getFontSizeComboBox() {
+        return fontSizeComboBox;
+    }
+
+    public JComboBox<String> getFontStyleComboBox() {
+        return fontStyleComboBox;
+    }
+
+    public JComboBox<String> getColorComboBox() {
+        return colorComboBox;
+    }
+
+    public JComboBox<String> getTextDirectionComboBox() {
+        return textDirectionComboBox;
+    }
+
+    public JTextArea getTextArea() {
+        return textArea;
+    }
+
+    public JSlider getLetterSpacingSlider() {
+        return letterSpacingSlider;
+    }
+
+    public JSlider getMarginSlider() {
+        return marginSlider;
+    }
+
+    public JSlider getvOffsetSlider() {
+        return vOffsetSlider;
+    }
+
+    public JSlider gethOffsetSlider() {
+        return hOffsetSlider;
+    }
+
+    public JTextField getImageDirectoryTextField() {
+        return imageDirectoryTextField;
+    }
+
+    public JComboBox<String> getImageFitStyleComboBox() {
+        return imageFitStyleComboBox;
+    }
+
+    public Hashtable<Integer, Color> getColorHashtable() {
+        return colorHashtable;
+    }
+
+    public boolean isInitializing() {
+        return initializing;
+    }
+
+    public JButton getConfirmButton() {
+        return confirmButton;
+    }
+
+    public JButton getApplyButton() {
+        return applyButton;
+    }
+
+    public JButton getPreviewButton() {
+        return previewButton;
+    }
+
+    public JButton getCancelButton() {
+        return cancelButton;
+    }
+
+    public void markInitialized() {
+        initializing = false;
+    }
 }
 

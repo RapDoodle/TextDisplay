@@ -60,6 +60,10 @@ public class Profile implements Serializable {
                 profile.textOrientation, profile.getImgFitStyle(), profile.isActive());
     }
 
+    public boolean isHorizontal() {
+        return getTextOrientation() == 0;
+    }
+
     public String getName() {
         return name;
     }

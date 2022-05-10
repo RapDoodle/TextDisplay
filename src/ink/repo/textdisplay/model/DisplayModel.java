@@ -16,28 +16,15 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ModelDisplay {
+public class DisplayModel {
 
     private Profile profile;
+    private boolean previewMode;
+    private Dimension screenSize;
 
-    public ModelDisplay() {
-        profile = ProfileManager.getProfile();
-    }
-
-    public ModelDisplay(Profile profile) {
-        // NOT USED. JUST FOR FUTURE DEVELOPMENT
+    public DisplayModel(Profile profile) {
         this.profile = profile;
-    }
-
-    public void updateProfile() {
-        // NOT USED. JUST FOR FUTURE DEVELOPMENT
-        // Retrieve profile from Profile manager again
-        profile = ProfileManager.getProfile();
-    }
-
-    public Profile getProfile() {
-        // Return the current profile registered in the model
-        return profile;
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     }
 
     public ArrayList<JLabel> getLabels() {
@@ -49,7 +36,7 @@ public class ModelDisplay {
             Font font = profile.getFont();
             Color color = profile.getColor();
             htmlCode.append("<html><p>");
-            if(profile.getTextOrientation() != 0) {
+            if (profile.getTextOrientation() != 0) {
                 // When the text orientation is vertical
                 String[] chars = s.split("");
                 for (String currentChar : chars) {
@@ -59,7 +46,7 @@ public class ModelDisplay {
                             .append(currentChar)
                             .append("</p>");
                 }
-            }else{
+            } else {
                 // When the orientation is horizontal, append the text directly
                 htmlCode.append(s);
             }
@@ -72,35 +59,26 @@ public class ModelDisplay {
             label.setVerticalAlignment(JLabel.CENTER);
             labels.add(label);
         }
-        if(profile.getTextOrientation() == 2) {
+        if (profile.getTextOrientation() == 2) {
             // If "vertical (inverse)" is selected
             Collections.reverse(labels);
         }
         return labels;
     }
 
-    public int getMargin() {
-        return profile.getMargin();
+    public Profile getProfile() {
+        return profile;
     }
 
-    public int getVerticalOffset() {
-        return profile.getvOffset();
+    public boolean isPreviewMode() {
+        return previewMode;
     }
 
-    public int getHorizontalOffset() {
-        return profile.gethOffset();
+    public void setPreviewMode(boolean previewMode) {
+        this.previewMode = previewMode;
     }
 
-    public boolean isHorizontal() {
-        return profile.getTextOrientation() == 0;
+    public Dimension getScreenSize() {
+        return screenSize;
     }
-
-    public File getBackgroundImageDir() {
-        return profile.getBackgroundImageDir();
-    }
-
-    public int getImageFitStyle() {
-        return profile.getImgFitStyle();
-    }
-
 }

@@ -38,8 +38,12 @@ public class CommonUtils {
         gbc.gridx = 0;
     }
 
-    public static int getColorFromIndex(Color color) throws NullPointerException{
-        return colorHashMap.get(color);
+    public static int getColorFromIndex(Color color) throws NullPointerException {
+        try {
+            return colorHashMap.get(color);
+        } catch (NullPointerException e) {
+            return -1;
+        }
     }
 
     public static Color getIndexFromColor(int index) throws NullPointerException{

@@ -13,30 +13,30 @@ import ink.repo.textdisplay.util.Log;
 import ink.repo.textdisplay.util.ProfileManager;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.*;
 
-public class ModelPreference {
+public class PreferenceModel {
 
-    // TO-DO: Support user selected preference
     private File profileDirectory;
+    private Color color;
 
-    public ModelPreference() {
-
+    public PreferenceModel() {
         profileDirectory = new File(ConfigManager.getConfigEntry("profile_location"));
 
-        if(!profileDirectory.exists()) {
+        if (!profileDirectory.exists()) {
             JOptionPane.showMessageDialog(null, LangManger.get("init_profile"));
             ProfileManager.setProfile(new Profile());
-        }else{
+        } else {
             try {
                 read();
-            }catch(IOException | NullPointerException | ClassNotFoundException e) {
+            } catch (IOException | NullPointerException | ClassNotFoundException e) {
                 Log.log(e.getMessage());
-                if(JOptionPane.showConfirmDialog(null, LangManger.get("incompatible_profile"),
+                if (JOptionPane.showConfirmDialog(null, LangManger.get("incompatible_profile"),
                         LangManger.get("message"), JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                    // When a incompatible profile is detected
+                    // When an incompatible profile is detected
                     ProfileManager.setProfile(new Profile());
-                }else{
+                } else {
                     System.exit(1);
                 }
             }
@@ -58,6 +58,7 @@ public class ModelPreference {
         // Read the profile
         FileInputStream fis = new FileInputStream(profileDirectory);
         ObjectInputStream in = new ObjectInputStream(fis);
+
         // Register the profile to the profile manager
         ProfileManager.setProfile((Profile)in.readObject());
         in.close();
@@ -70,4 +71,11 @@ public class ModelPreference {
         return ProfileManager.getProfile();
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 }

@@ -26,7 +26,7 @@ public class LangManger {
         try {
             String jsonString = FileUtils.readFileToString(langFile, "UTF-8");
             langTable = new JSONObject(jsonString);
-        }catch(IOException e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
             String errMsg = "Unable to read language pack at " +
                     langFile.getAbsolutePath() + ".\nPlease consider reinstalling the program!";
@@ -34,7 +34,7 @@ public class LangManger {
                     JOptionPane.ERROR_MESSAGE);
             Log.logError(e.getMessage() + " | " + errMsg);
             System.exit(1);
-        }catch(JSONException e) {
+        } catch (JSONException e) {
             String errMsg = "Error occurred while creating the language " +
                     "table.\nPlease verify the language file at " + langFile.getAbsolutePath();
             JOptionPane.showMessageDialog(null, errMsg);

@@ -25,7 +25,7 @@ public class ConfigManager {
         try {
             String jsonString = FileUtils.readFileToString(configFile, "UTF-8");
             config = new JSONObject(jsonString);
-        }catch(IOException e) {
+        } catch (IOException e) {
             // Initialize the array
             config = new JSONObject();
 
@@ -34,13 +34,13 @@ public class ConfigManager {
 
             // Get default language and store the default language
             String lang = Locale.getDefault().getLanguage();
-            switch(lang) {
+            switch (lang) {
                 case "zh":
                     // When the language is Chinese
-                    if(Locale.getDefault().getCountry().equals("CN")) {
+                    if (Locale.getDefault().getCountry().equals("CN")) {
                         // If the region is mainland China, use simplified Chinese
                         lang = "zh-Hans";
-                    }else{
+                    } else {
                         // If the region is outside mainland China but still uses Chinese, use tradition Chinese
                         lang = "zh-Hant";
                     }
@@ -58,7 +58,7 @@ public class ConfigManager {
         try {
             FileUtils.writeStringToFile(configFile, config.toString(), "UTF-8");
             Log.log("Configuration updated.");
-        }catch(Exception e) {
+        } catch (Exception e) {
             Log.logError(e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -67,7 +67,7 @@ public class ConfigManager {
     public static String getConfigEntry(String key) {
         try {
             return (String) config.get(key);
-        }catch(Exception e) {
+        } catch (Exception e) {
             Log.logError(e.getMessage());
         }
         return null;
@@ -77,7 +77,7 @@ public class ConfigManager {
         try {
             config.put(key, value);
             saveConfig();
-        }catch(Exception e) {
+        } catch (Exception e) {
             Log.logError(e.getMessage());
             JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }

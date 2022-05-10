@@ -8,30 +8,30 @@
 
 package ink.repo.textdisplay.util;
 
-import ink.repo.textdisplay.view.ViewDisplay;
-import ink.repo.textdisplay.view.ViewPreference;
+import ink.repo.textdisplay.view.DisplayView;
+import ink.repo.textdisplay.view.PreferenceView;
 
 public class ViewsManager {
 
-    private static ViewDisplay viewDisplay;
-    private static ViewPreference viewPreference;
+    private static DisplayView displayView;
+    private static PreferenceView preferenceView;
 
-    public static ViewDisplay getViewDisplay() {
-        return viewDisplay;
+    public static DisplayView getDisplayView() {
+        return displayView;
     }
 
-    public static void setViewDisplay(ViewDisplay viewDisplay) {
-        ViewsManager.viewDisplay = viewDisplay;
+    public static void setDisplayView(DisplayView displayView) {
+        ViewsManager.displayView = displayView;
     }
 
-    public static ViewPreference getViewPreference() {
-        return viewPreference;
+    public static PreferenceView getPreferenceView() {
+        return preferenceView;
     }
 
-    public static void setViewPreference(ViewPreference viewPreference) {
+    public static void setPreferenceView(PreferenceView preferenceView) {
         // Not allowed to change the reference once it is set
-        if(viewPreference != null) {
-            ViewsManager.viewPreference = viewPreference;
+        if (preferenceView != null) {
+            ViewsManager.preferenceView = preferenceView;
         }
     }
 
