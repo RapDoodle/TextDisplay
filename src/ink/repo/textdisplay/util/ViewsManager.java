@@ -21,6 +21,10 @@ public class ViewsManager {
     }
 
     public static void setDisplayView(DisplayView displayView) {
+        // Close the old DisplayView
+        if (ViewsManager.displayView != null) {
+            ViewsManager.displayView.dispose();
+        }
         ViewsManager.displayView = displayView;
     }
 
