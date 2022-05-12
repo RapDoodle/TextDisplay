@@ -8,11 +8,9 @@
 package ink.repo.textdisplay.model;
 
 import ink.repo.textdisplay.profile.Profile;
-import ink.repo.textdisplay.util.ProfileManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -27,7 +25,7 @@ public class DisplayModel {
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     }
 
-    public ArrayList<JLabel> getLabels() {
+    public ArrayList<JLabel> getLabelsHTML() {
         ArrayList<JLabel> labels = new ArrayList<>();
         String[] originalText = profile.getText().split("\n");
         // Convert to HTML code
@@ -68,6 +66,10 @@ public class DisplayModel {
 
     public Profile getProfile() {
         return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public boolean isPreviewMode() {

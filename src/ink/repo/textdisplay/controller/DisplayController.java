@@ -73,7 +73,7 @@ public class DisplayController {
         setTextPanelBounds(textPanel, m.getScreenSize());
 
         // Load labels into the frame
-        ArrayList<JLabel> labels = m.getLabels();
+        ArrayList<JLabel> labels = m.getLabelsHTML();
         for(JLabel label : labels) {
             textPanel.add(label);
         }
@@ -91,7 +91,7 @@ public class DisplayController {
         v.add(getBackgroundLabel(m.getScreenSize()));
     }
 
-    public void setTextPanelBounds(JPanel textPanel, Dimension screenSize) {
+    private void setTextPanelBounds(JPanel textPanel, Dimension screenSize) {
         double vMargin = m.getProfile().isHorizontal() ? (double) m.getProfile().getMargin() / 100 : 0;
         double hMargin = m.getProfile().isHorizontal() ? 0 : (double) m.getProfile().getMargin() / 100;
         double vOffset = (double) m.getProfile().getvOffset() / 100;
@@ -101,7 +101,7 @@ public class DisplayController {
                 (int)(screenSize.getWidth() * (1 - 2 * hMargin)), (int)(screenSize.getHeight() * (1 - 2 * vMargin)));
     }
 
-    public JLabel getBackgroundLabel(Dimension screenSize) {
+    private JLabel getBackgroundLabel(Dimension screenSize) {
         // TO-DO: Stretch and Scale modes
         // Load Background image
         ImageIcon img = new ImageIcon(m.getProfile().getBackgroundImageDir().getPath());
@@ -144,6 +144,13 @@ public class DisplayController {
 
     public Profile getProfile() {
         return m.getProfile();
+    }
+
+    public void setProfile(Profile profile) {
+        // Change the profile after the current profile is displaying. In other scenarios,
+        // pass the Profile object as an argument to the constructor of DisplayController.
+        m.setProfile(profile);
+        renderView();
     }
 
 }
