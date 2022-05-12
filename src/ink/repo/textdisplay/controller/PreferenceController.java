@@ -164,7 +164,7 @@ public class PreferenceController {
     }
 
     public void confirmBtnClicked() {
-        Profile profile = wrapProfile();
+        Profile profile = wrapSettings();
         trySave(profile);
         SwingUtilities.invokeLater(() -> {
             new DisplayController(profile, false);
@@ -173,7 +173,7 @@ public class PreferenceController {
     }
 
     public void previewBtnClicked() {
-        Profile profile = wrapProfile();
+        Profile profile = wrapSettings();
         SwingUtilities.invokeLater(() -> {
             new DisplayController(profile, true);
         });
@@ -181,7 +181,7 @@ public class PreferenceController {
     }
 
     public void applyBtnClicked() {
-        Profile profile = wrapProfile();
+        Profile profile = wrapSettings();
         trySave(profile);
     }
 
@@ -194,7 +194,7 @@ public class PreferenceController {
         }
     }
 
-    public Profile wrapProfile() {
+    public Profile wrapSettings() {
         PreferenceInfoPanel p = v.getProfilePanel();
         return new Profile(p.getProfileNameTextField().getText(),
                 p.getTextArea().getText(),
